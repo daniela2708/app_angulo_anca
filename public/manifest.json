@@ -1,0 +1,23 @@
+{
+  "name": "Rumpex AI",
+  "short_name": "Rumpex AI", 
+  "description": "Análisis inteligente del ángulo de anca en vacas lecheras",
+  "theme_color": "#7A4E32",
+  "background_color": "#FBF5E9",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
