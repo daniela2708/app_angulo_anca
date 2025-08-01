@@ -89,27 +89,40 @@ export const RumpexHome = () => {
       const { data, error } = await supabase.functions.invoke('analyze-image', {
         body: {
           image: selectedImage,
-          prompt: `Analiza esta imagen de una vaca lechera y evalúa el ángulo de su anca (rump angle). 
+          prompt: `Eres un experto veterinario especializado en conformación bovina. Analiza esta imagen de una vaca lechera y evalúa ESPECÍFICAMENTE el ángulo de su anca (rump angle).
 
-INSTRUCCIONES ESPECÍFICAS:
-1. Identifica si la imagen contiene una vaca lechera visible
-2. Si es válida, mide el ángulo del anca (línea desde el hueso de la cadera hasta el isquion)
-3. Clasifica según escala lineal 1-9 donde:
-   - 1-3: Pronunciada caída (>30°)
-   - 4-5: Intermedio (20-30°)
-   - 6-7: Ligera caída (10-20°)
-   - 8-9: Alto/Nivelado (<10°)
+PROCESO DE ANÁLISIS TÉCNICO:
+1. VALIDACIÓN: Confirma que la imagen contiene una vaca lechera vista de perfil lateral
+2. IDENTIFICACIÓN ANATÓMICA: Localiza exactamente:
+   - Tuberosidad coxal (hueso de la cadera/pin bone)
+   - Tuberosidad isquiática (pin bone/isquion)
+   - Línea dorsal del anca
+3. MEDICIÓN PRECISA: Mide el ángulo entre la línea horizontal y la línea que conecta estos puntos anatómicos
+4. EVALUACIÓN CRÍTICA: Analiza la conformación real de ESTA vaca específica
 
-Devuelve ÚNICAMENTE un JSON con esta estructura exacta:
+ESCALA DE PUNTUACIÓN LINEAL (1-9):
+- 1-2: Anca muy caída (>35°) - Defecto severo
+- 3-4: Anca pronunciadamente caída (25-35°) - Defecto moderado  
+- 5-6: Anca intermedia/ligera caída (15-25°) - Aceptable
+- 7-8: Anca nivelada/alta (5-15°) - Deseable
+- 9: Anca muy alta (<5°) - Excelente
+
+ANÁLISIS DIFERENCIAL OBLIGATORIO:
+- Considera la raza, edad aparente, posición de la vaca
+- Evalúa la calidad ósea y muscular del área
+- NO uses valores por defecto - cada vaca es única
+- Sé crítico y preciso en tu evaluación
+
+Devuelve ÚNICAMENTE este JSON con mediciones reales:
 {
   "valido": boolean,
-  "razonInvalidez": "string o null",
+  "razonInvalidez": "string detallada si no es válida",
   "numeroVacasDetectadas": number,
   "vacaAnalizada": number,
-  "anguloCm": number,
-  "puntajeLineal": number (1-9),
+  "anguloCm": number (ángulo real medido),
+  "puntajeLineal": number (1-9, basado en medición real),
   "categoria": "Alto" | "Nivelado" | "Ligera caída" | "Intermedio" | "Pronunciada",
-  "recomendacion": "string con sugerencias técnicas"
+  "recomendacion": "string con análisis técnico específico de esta vaca"
 }`
         }
       });
@@ -153,15 +166,15 @@ Devuelve ÚNICAMENTE un JSON con esta estructura exacta:
   const getCategoryColor = (categoria?: string) => {
     switch (categoria) {
       case 'Alto':
-        return 'text-primary';
+        return 'text-green-600'; // Excelente - Verde
       case 'Nivelado':
-        return 'text-primary';
+        return 'text-green-500'; // Muy bueno - Verde claro
       case 'Ligera caída':
-        return 'text-yellow-600';
+        return 'text-yellow-500'; // Aceptable - Amarillo
       case 'Intermedio':
-        return 'text-orange-600';
+        return 'text-orange-500'; // Necesita atención - Naranja
       case 'Pronunciada':
-        return 'text-destructive';
+        return 'text-red-600'; // Problemático - Rojo
       default:
         return 'text-foreground';
     }
